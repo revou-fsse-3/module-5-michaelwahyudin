@@ -1,4 +1,4 @@
-// pages/index.js
+// src/app/page.js
 import Link from 'next/link';
 
 const HomePage = () => (
@@ -7,12 +7,12 @@ const HomePage = () => (
     <nav>
       <ul>
         <li>
-          <Link href="/serverPage" passHref>
+          <Link href="/server" passHref>
             Server-side Page
           </Link>
         </li>
         <li>
-          <Link href="/clientPage" passHref>
+          <Link href="/client" passHref>
             Client-side Page
           </Link>
         </li>
