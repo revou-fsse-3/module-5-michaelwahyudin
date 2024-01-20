@@ -7,11 +7,11 @@ const HomePage = () => (
     <nav>
       <ul>
         <li>
-          <Link href="/server" passHref>
+          <Link href="/serverpage" passHref>
             Server-side Page
           </Link>
         </li>
-        <li>
+       <li>
           <Link href="/client" passHref>
             Client-side Page
           </Link>
