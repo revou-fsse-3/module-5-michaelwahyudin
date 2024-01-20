@@ -8,12 +8,12 @@ const HomePage = () => (
       <ul>
         <li>
           <Link href="/serverpage" passHref>
-            Server-side Page
+            10 Pokemon
           </Link>
         </li>
-       <li>
-          <Link href="/client" passHref>
-            Client-side Page
+        <li>
+          <Link href="/clientpage" passHref>
+            151 Pokemon
           </Link>
         </li>
       </ul>

@@ -1,30 +1,16 @@
-// src/app/clientPage.js
-import React, { useEffect, useState } from 'react';
+// src/app/clientpage/page.js
+const ClientPage = async () => {
+  const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151');
+  const data = await response.json();
 
-const ClientPage = () => {
-  const [pokemonData, setPokemonData] = useState([]);
-
-  useEffect(() => {
-    // Fetch data on the client side
-    const fetchData = async () => {
-      try {
-        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=10');
-        const data = await response.json();
-        setPokemonData(data.results);
-      } catch (error) {
-        console.error('Error fetching Pokemon data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  console.log(data);
 
   return (
     <div>
       <h1>Welcome to the Poke API Homepage</h1>
-      {/* Display the data fetched on the client side */}
+      {/* Display the data fetched during client-side rendering */}
       <ul>
-        {pokemonData.map((pokemon, index) => (
+        {data.results.map((pokemon, index) => (
           <li key={index}>{pokemon.name}</li>
         ))}
       </ul>
