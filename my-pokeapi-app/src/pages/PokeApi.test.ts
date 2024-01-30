@@ -9,7 +9,7 @@ describe('getPokemonList', () => {
       data: {
         results: [
           { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
-          // Add more mocked data as needed
+          { name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' },
         ],
       },
     };
@@ -18,11 +18,10 @@ describe('getPokemonList', () => {
 
     const result = await getPokemonList();
 
-    // Assertions
     expect(axios.get).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon');
     expect(result).toEqual([
-      { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
-      // Add expected results as needed
+      { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/', sprite: expect.any(String) },
+      { name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/', sprite: expect.any(String) },
     ]);
   });
 
@@ -31,5 +30,7 @@ describe('getPokemonList', () => {
     (axios.get as jest.MockedFunction<typeof axios.get>).mockRejectedValue(new Error(errorMessage));
 
     await expect(getPokemonList()).rejects.toThrow(errorMessage);
+
+    await expect(getPokemonList()).resolves.toEqual([]);
   });
 });

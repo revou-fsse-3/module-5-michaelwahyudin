@@ -1,4 +1,3 @@
-// pages/index.tsx
 import { useEffect, useState } from 'react';
 import getPokemonList from './api/pokeApi';
 import Image from 'next/image';
@@ -9,12 +8,22 @@ interface PokemonWithSprite {
   sprite: string;
 }
 
-export default function Home({ pokemonList }: { pokemonList: PokemonWithSprite[] }) {
+export default function Home({ pokemonList }: { pokemonList?: PokemonWithSprite[] }) {
+  const [pokemons, setPokemons] = useState<PokemonWithSprite[]>([]);
+
+  useEffect(() => {
+    if (!pokemonList) {
+      getPokemonList().then((pokemonList) => setPokemons(pokemonList));
+    } else {
+      setPokemons(pokemonList);
+    }
+  }, [pokemonList]);
+
   return (
     <div>
       <h1 className="title">Pokemon List</h1>
       <ul>
-        {pokemonList.map((pokemon) => (
+        {pokemons.map((pokemon) => (
           <li key={pokemon.name}>
             <Image
               src={pokemon.sprite}

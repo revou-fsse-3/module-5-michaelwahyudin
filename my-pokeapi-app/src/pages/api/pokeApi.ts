@@ -1,4 +1,3 @@
-// pages/api/PokeApi.ts
 import axios from 'axios';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
@@ -21,8 +20,7 @@ const getPokemonList = async (): Promise<PokemonWithSprite[]> => {
       pokemonList.map(async (pokemon) => {
         const pokemonDetails = await axios.get(pokemon.url);
         const sprite = pokemonDetails.data.sprites.front_default;
-
-        return { ...pokemon, sprite };
+        return { ...pokemon, sprite: sprite || '' };
       })
     );
 
