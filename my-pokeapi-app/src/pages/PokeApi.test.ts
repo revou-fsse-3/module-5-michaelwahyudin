@@ -66,11 +66,9 @@
 
 });
 
-it('handles errors during API fetch and resolves to an empty array', async () => {
-  const errorMessage = 'Network Error';
-  (axios.get as jest.MockedFunction<typeof axios.get>).mockRejectedValue(new Error(errorMessage));
-
-  const result = await getPokemonList();
-
-  expect(result).toEqual([]);
-});
+it('handles errors during API fetch', async () => {
+    const errorMessage = 'Network Error';
+    (axios.get as jest.MockedFunction<typeof axios.get>).mockRejectedValue(new Error(errorMessage));
+  
+    await expect(getPokemonList()).rejects.toThrow(`Error fetching Pokemon list: ${errorMessage}`);
+  });

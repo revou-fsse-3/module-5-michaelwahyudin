@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const BASE_URL = 'https://pokeapi.co/api/v2';
 
@@ -20,14 +20,21 @@ const getPokemonList = async (): Promise<PokemonWithSprite[]> => {
       pokemonList.map(async (pokemon) => {
         const pokemonDetails = await axios.get(pokemon.url);
         const sprite = pokemonDetails.data.sprites.front_default;
-        return { ...pokemon, sprite: sprite || '' };
+
+        return { ...pokemon, sprite };
       })
     );
 
     return pokemonWithSprites;
   } catch (error) {
     console.error('Error fetching Pokemon list:', error);
-    return [];
+
+    if (axios.isAxiosError(error)) {
+      // AxiosError includes more specific error properties
+      throw new Error(`Error fetching Pokemon list: ${error.message}`);
+    } else {
+      throw new Error(`Error fetching Pokemon list: ${error}`);
+    }
   }
 };
 
