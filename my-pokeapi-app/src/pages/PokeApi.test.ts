@@ -1,36 +1,76 @@
-import axios, { AxiosRequestConfig } from 'axios';
-import getPokemonList from './api/pokeApi';
+    import axios from 'axios';
+    import getPokemonList from './api/pokeApi';
 
-jest.mock('axios');
+    jest.mock('axios');
 
-describe('getPokemonList', () => {
-  it('fetches successfully data from an API', async () => {
-    const mockedData = {
-      data: {
-        results: [
-          { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
-          { name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' },
-        ],
-      },
-    };
+    describe('getPokemonList', () => {
+    it('fetches successfully data from an API', async () => {
+        const mockedData = {
+        data: {
+            results: [
+            { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/' },
+            { name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/' },
+            ],
+        },
+        };
 
-    (axios.get as jest.MockedFunction<typeof axios.get>).mockResolvedValue(mockedData);
+        (axios.get as jest.MockedFunction<typeof axios.get>).mockResolvedValueOnce(mockedData);
 
-    const result = await getPokemonList();
+        const mockedPokemonDetailsDataBulbasaur = {
+        data: {
+            sprites: {
+            front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+            },
+        },
+        };
 
-    expect(axios.get).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon');
-    expect(result).toEqual([
-      { name: 'bulbasaur', url: 'https://pokeapi.co/api/v2/pokemon/1/', sprite: expect.any(String) },
-      { name: 'ivysaur', url: 'https://pokeapi.co/api/v2/pokemon/2/', sprite: expect.any(String) },
-    ]);
-  });
+        const mockedPokemonDetailsDataIvysaur = {
+        data: {
+            sprites: {
+            front_default: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png',
+            },
+        },
+        };
 
-  it('handles errors during API fetch', async () => {
-    const errorMessage = 'Network Error';
-    (axios.get as jest.MockedFunction<typeof axios.get>).mockRejectedValue(new Error(errorMessage));
+        // Mock the response for both 'bulbasaur' and 'ivysaur'
+        (axios.get as jest.MockedFunction<typeof axios.get>)
+        .mockResolvedValueOnce(mockedPokemonDetailsDataBulbasaur)
+        .mockResolvedValueOnce(mockedPokemonDetailsDataIvysaur);
 
-    await expect(getPokemonList()).rejects.toThrow(errorMessage);
+        const result = await getPokemonList();
 
-    await expect(getPokemonList()).resolves.toEqual([]);
-  });
+        expect(axios.get).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon');
+        expect(axios.get).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon/1/');
+        expect(axios.get).toHaveBeenCalledWith('https://pokeapi.co/api/v2/pokemon/2/');
+
+        expect(result).toEqual([
+        {
+            name: 'bulbasaur',
+            url: 'https://pokeapi.co/api/v2/pokemon/1/',
+            sprite: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+        },
+        {
+            name: 'ivysaur',
+            url: 'https://pokeapi.co/api/v2/pokemon/2/',
+            sprite: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png',
+        },
+        ]);
+    });
+
+    it('handles errors during API fetch', async () => {
+        const errorMessage = 'Network Error';
+        (axios.get as jest.MockedFunction<typeof axios.get>).mockRejectedValue(new Error(errorMessage));
+    
+        await expect(getPokemonList()).rejects.toThrow(errorMessage);
+    });
+
+});
+
+it('handles errors during API fetch and resolves to an empty array', async () => {
+  const errorMessage = 'Network Error';
+  (axios.get as jest.MockedFunction<typeof axios.get>).mockRejectedValue(new Error(errorMessage));
+
+  const result = await getPokemonList();
+
+  expect(result).toEqual([]);
 });
