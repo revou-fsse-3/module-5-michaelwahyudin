@@ -1,6 +1,7 @@
 // pages/index.tsx
 import { useEffect, useState } from 'react';
 import getPokemonList from './api/pokeApi';
+import Image from 'next/image';
 
 interface PokemonWithSprite {
   name: string;
@@ -15,7 +16,12 @@ export default function Home({ pokemonList }: { pokemonList: PokemonWithSprite[]
       <ul>
         {pokemonList.map((pokemon) => (
           <li key={pokemon.name}>
-            <img src={pokemon.sprite} alt={pokemon.name} />
+            <Image
+              src={pokemon.sprite}
+              alt={pokemon.name}
+              width={50} // set the width of the image as needed
+              height={50} // set the height of the image as needed
+            />
             {pokemon.name}
           </li>
         ))}
