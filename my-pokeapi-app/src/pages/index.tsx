@@ -1,13 +1,16 @@
 // pages/index.tsx
 import { useEffect, useState } from 'react';
-import getPokemonList from './api/PokeApi';
+import getPokemonList from './api/pokeApi';
+import Image from 'next/image';
 
-interface Pokemon {
+interface PokemonWithSprite {
   name: string;
+  url: string;
+  sprite: string;
 }
 
 export default function Home() {
-  const [pokemonList, setPokemonList] = useState<Pokemon[]>([]);
+  const [pokemonList, setPokemonList] = useState<PokemonWithSprite[]>([]);
 
   useEffect(() => {
     const fetchPokemonList = async () => {
@@ -23,7 +26,15 @@ export default function Home() {
       <h1>Pokemon List</h1>
       <ul>
         {pokemonList.map((pokemon) => (
-          <li key={pokemon.name}>{pokemon.name}</li>
+          <li key={pokemon.name}>
+            <Image
+              src={pokemon.sprite}
+              alt={pokemon.name}
+              width={50} // set the width of the image as needed
+              height={50} // set the height of the image as needed
+            />
+            {pokemon.name}
+          </li>
         ))}
       </ul>
     </div>
