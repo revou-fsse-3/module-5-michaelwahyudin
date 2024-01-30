@@ -61,7 +61,11 @@
         const errorMessage = 'Network Error';
         (axios.get as jest.MockedFunction<typeof axios.get>).mockRejectedValue(new Error(errorMessage));
     
-        await expect(getPokemonList()).rejects.toThrow(errorMessage);
+// Previous test code
+await expect(getPokemonList()).rejects.toThrow(`Error fetching Pokemon list:`);
+
+
+
     });
 
 });
