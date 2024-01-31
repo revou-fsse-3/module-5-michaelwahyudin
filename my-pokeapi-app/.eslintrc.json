@@ -2,20 +2,30 @@
   "extends": [
     "next",
     "next/core-web-vitals",
-    "plugin:@next/recommended",
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended"
-  ],
-  "parser": "@babel/eslint-parser",
-  "parserOptions": {
-    "requireConfigFile": false,
-    "babelOptions": {
-      "presets": ["next/babel"]
-    }
-  },
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+    "plugin:next/typescript"
+  ],  
   "plugins": [
-    "@next/eslint-plugin-next",
     "react",
-    "react-hooks"
-  ]
+    "react-hooks",
+    "next",
+    "@typescript-eslint",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

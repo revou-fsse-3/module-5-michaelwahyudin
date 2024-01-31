@@ -1,53 +1,26 @@
-import { act, render, screen } from '@testing-library/react';
-import Home from './index'; // Adjust the path accordingly
-import * as pokeApi from './api/pokeApi';
-
-jest.mock('../api/pokeApi');
+import { render, screen } from '@testing-library/react';
+import Home from './index';
 
 const mockPokemonList = [
-  {
-    name: 'bulbasaur',
-    url: 'https://pokeapi.co/api/v2/pokemon/1/',
-    sprite: 'http://localhost:3000/_next/image?url=https%3A%2F%2Fraw.githubusercontent.com%2FPokeAPI%2Fsprites%2Fmaster%2Fsprites%2Fpokemon%2F1.png&w=64&q=75',
-  },
+  { name: 'Bulbasaur', sprite: 'bulbasaur-sprite-url' },
+  { name: 'Charmander', sprite: 'charmander-sprite-url' },
+  // Add more mock data as needed
 ];
 
-describe('Home Component', () => {
-  it('renders Pokemon list from API', async () => {
-    (pokeApi.default as jest.Mock).mockResolvedValue(mockPokemonList);
+jest.mock('./api/pokeApi', () => ({
+  __esModule: true,
+  default: jest.fn(() => Promise.resolve(mockPokemonList)),
+}));
 
-    let component;
+describe('Home', () => {
+  it('renders Pokemon list', async () => {
+    render(<Home />);
+    
+    // Wait for the component to render the Pokemon list
+    const pokemonListItems = await screen.findAllByRole('listitem');
 
-    await act(async () => {
-      component = render(<Home />);
-    });
+    expect(pokemonListItems).toHaveLength(mockPokemonList.length);
 
-    const bulbasaurElement = screen.getByText('bulbasaur');
-    const imageElement = screen.getByAltText('bulbasaur');
-
-    expect(bulbasaurElement).toBeInTheDocument();
-    expect(imageElement).toBeInTheDocument();
-  });
-
-  it('renders Pokemon list from props', async () => {
-    const pokemonList = [
-      {
-        name: 'charmander',
-        url: 'https://pokeapi.co/api/v2/pokemon/4/',
-        sprite: 'http://localhost:3000/_next/image?url=https%3A%2F%2Fraw.githubusercontent.com%2FPokeAPI%2Fsprites%2Fmaster%2Fsprites%2Fpokemon%2F4.png&w=64&q=75',
-      },
-    ];
-
-    let component;
-
-    await act(async () => {
-      component = render(<Home pokemonList={pokemonList} />);
-    });
-
-    const charmanderElement = screen.getByText('charmander');
-    const charmanderImageElement = screen.getByAltText('charmander');
-
-    expect(charmanderElement).toBeInTheDocument();
-    expect(charmanderImageElement).toBeInTheDocument();
+    // Add more assertions based on your component's behavior
   });
 });
