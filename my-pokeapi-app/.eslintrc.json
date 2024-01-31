@@ -1,6 +1,21 @@
 {
   "extends": [
     "next",
-    "next/core-web-vitals"
+    "next/core-web-vitals",
+    "plugin:@next/recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["next/babel"]
+    }
+  },
+  "plugins": [
+    "@next/eslint-plugin-next",
+    "react",
+    "react-hooks"
   ]
 }
